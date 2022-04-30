@@ -17,8 +17,8 @@ all:
 hex2bin: #for converting the firmware hex file to a binary file prior to sending over the serial port
 	avr-objcopy -I ihex $(APP).hex -O binary $(APP).bin 
 
-fuse: #use this command to change the size of the BLS, and/or relocate the RESET vector to the BLS. Proceed with caution
-	avrdude -p $(MCU) -D -c $(PRGMR) -U hfuse:w:0b11010000:m 
+fuse: #This simply changes the BOOTRST fuse to jump to the bootloader code on reset. Alter the fuses at your own risk!
+	avrdude -p $(MCU) -D -c $(PRGMR) -U hfuse:w:0b11011000:m  
 	
 wr_eeprom:	#writes to the eeprom of the AVR
 	avrdude -p $(MCU) -D -c $(PRGMR) -U eeprom:w:$(APP).hex:i -F -P usb
@@ -36,4 +36,4 @@ r_flash:	#read the contents of the flash memory into a file (for debugging)
 	avrdude -p $(MCU) -D -c $(PRGMR) -U flash:r:flashdump.txt:i -F -P usb
 
 clean:	#remove junk files
-	rm -rf $(SRC).o $(BOOT).elf $(BOOT).hex
+	rm -rf $(SRC).o $(BOOT).elf $(BOOT).hex filetransfer.exe

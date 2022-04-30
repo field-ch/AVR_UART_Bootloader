@@ -36,25 +36,28 @@ int main(void)
 	_delay_ms(1000);
 
 	
-	
 	uint32_t page = 0;	//address of the next flash page to be written to
 	uint16_t word;	//next data word to write
-	uint16_t i;		//index
+	uint16_t i = 0;
+	uint16_t filesz = 0;
+
 	uint8_t sreg;	
-	uint8_t app_code[1024];		//buffer holding the application code, resize based on how big the firmware update is
+	uint8_t app_code[1024];
 	uint8_t * app_code_addr = app_code;	
-	int rem_pages = 0;
+	uint8_t rem_pages = 0;
 	
 	
 	usart_init();	//PC serial port is connected to the UART via a converter module
-	uint8_t app_sz = usart_rx_byte();	//wait to receive file size first
-
-	for(i = 0; i < app_sz; i++){
-		app_code[i] = usart_rx_byte();	//store the new application code in a temporary buffer
-	}
+	filesz = usart_rx_byte();
+	filesz = filesz + (usart_rx_byte() << 8);	//receive the file size as a 16 bit number
 	
-	rem_pages = app_sz/SPM_PAGESIZE;	//find the number of pages of memory to flash
-	if(app_sz%SPM_PAGESIZE) {rem_pages++;} //round up to the next page if there is a remainder
+	for(i = 0; i < filesz; i++){
+			app_code[i] = usart_rx_byte();
+	}
+
+	rem_pages = filesz/SPM_PAGESIZE;	//calculate minimum number of pages to write
+	if(filesz%SPM_PAGESIZE){rem_pages++;}	//round up to the next page if there is a remainder
+
 	while (1)
 	{
 		if(rem_pages){
