@@ -14,7 +14,7 @@ void usart_init(){
 	
 	UBRR0H = BRRV>>8;
 	UBRR0L = BRRV;
-	UCSR0B = 1<<RXEN0 | 1<<TXEN0; //enable rx interrupt, rx, tx
+	UCSR0B = 1<<RXEN0 | 1<<TXEN0; //enable rx, tx
 	UCSR0C = 1 << UCSZ01 | 1 << UCSZ00; // 1 stop bits, 8 bit data
 	
 }

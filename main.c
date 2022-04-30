@@ -52,7 +52,7 @@ int main(void)
 	filesz = filesz + (usart_rx_byte() << 8);	//receive the file size as a 16 bit number
 	
 	for(i = 0; i < filesz; i++){
-			app_code[i] = usart_rx_byte();
+			app_code[i] = usart_rx_byte(); //fill the buffer with the application code bytes
 	}
 
 	rem_pages = filesz/SPM_PAGESIZE;	//calculate minimum number of pages to write

@@ -8,7 +8,7 @@ namespace AVR_serial_update
 {
     public class update_app
     {
-        public static void Main(string[] args) //firmware file provided in CLA: eg .\Serial_Update.exe filename.bin
+        public static void Main(string[] args) //firmware file provided in CLA: eg .\app.exe filename.bin
         {
             FileStream _firmware = new FileStream(args[0], FileMode.Open, FileAccess.Read, FileShare.Read); //open update file
             BinaryReader br = new BinaryReader(_firmware);  //Need a binary stream to read the data since its a binary file
@@ -39,12 +39,8 @@ namespace AVR_serial_update
             /*UPLOAD FORMAT:
              * The AVR bootloader is expecting to receive the firmware update
              * in the following manner:
-             * 
-             * PACKET0: size of file
-             * PACKET1: 1st byte of update
-             * PACKET2: 2nd byte of update
-             * ...
-             * PACKETN: last byte of update
+             * 2 bytes --> size of file
+             * N bytes --> file bytes
              */
             _serialPort.Open();
             _serialPort.Write(_size, 0, 2); //Send firmware update size first
