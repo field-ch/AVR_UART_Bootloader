@@ -1,9 +1,3 @@
-/*
- * AVR_Bootloader.c
- *
- * Created: 4/21/2022 9:42:05 PM
- * Author : field
- */ 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/boot.h>
